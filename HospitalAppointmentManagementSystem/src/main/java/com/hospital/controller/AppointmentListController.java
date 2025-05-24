@@ -12,23 +12,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/patient/appointments")
+@RequestMapping("/patient")
 public class AppointmentListController {
 
     @Autowired
     private AppointmentService appointmentService;
 
-    @GetMapping
+    @GetMapping("/appointments")
     public String showAppointmentList(Model model) {
-        List<Appointment> appointments = appointmentService.getAllAppointmentsByPatient(1);
+        int patientId = 3; // Hardcoded for now
+        List<Appointment> appointments = appointmentService.getAppointmentsByPatient(patientId);
         model.addAttribute("appointments", appointments);
         return "appointmentList";
     }
 
-    @GetMapping("/details/{id}")
-    public String showAppointmentDetails(@PathVariable int id, Model model) {
-        Appointment appointment = appointmentService.getAppointmentById(id);
-        model.addAttribute("appointment", appointment);
-        return "appointmentDetails";
+    @GetMapping("/appointments/details/{id}")
+    public String showAppointmentDetails(@PathVariable("id") int id) {
+        return "appointmentDetails"; // Placeholder for Iteration 1
     }
 }

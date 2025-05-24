@@ -1,9 +1,9 @@
 package com.hospital.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.sql.Time;
 import java.util.Date;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "Appointments")
@@ -24,32 +24,40 @@ public class Appointment {
     @JoinColumn(name = "specialty_id")
     private Specialty specialty;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "appointment_date")
+    @NotNull(message = "Appointment date is required")
     private Date appointmentDate;
 
-    @DateTimeFormat(pattern = "HH:mm")
+    @Column(name = "appointment_time")
+    @NotNull(message = "Appointment time is required")
     private Time appointmentTime;
 
-    private Date createdDate;
-    private Date approvedDate;
+    @Column(name = "reason")
+    @NotNull(message = "Reason is required")
     private String reason;
+
+    @Column(name = "status")
     private String status;
 
+    @Column(name = "created_date")
+    private Date createdDate;
+
+    @Column(name = "approved_date")
+    private Date approvedDate;
+
+    // Constructors
     public Appointment() {}
-    public Appointment(int appointmentId, Patient patient, Doctor doctor, Specialty specialty, Date appointmentDate, 
-                       Time appointmentTime, Date createdDate, Date approvedDate, String reason, String status) {
-        this.appointmentId = appointmentId;
+    public Appointment(Patient patient, Specialty specialty, Date appointmentDate, Time appointmentTime, String reason) {
         this.patient = patient;
-        this.doctor = doctor;
         this.specialty = specialty;
         this.appointmentDate = appointmentDate;
         this.appointmentTime = appointmentTime;
-        this.createdDate = createdDate;
-        this.approvedDate = approvedDate;
         this.reason = reason;
-        this.status = status;
+        this.status = "Pending";
+        this.createdDate = new Date();
     }
 
+    // Getters and Setters
     public int getAppointmentId() { return appointmentId; }
     public void setAppointmentId(int appointmentId) { this.appointmentId = appointmentId; }
     public Patient getPatient() { return patient; }
@@ -62,38 +70,36 @@ public class Appointment {
     public void setAppointmentDate(Date appointmentDate) { this.appointmentDate = appointmentDate; }
     public Time getAppointmentTime() { return appointmentTime; }
     public void setAppointmentTime(Time appointmentTime) { this.appointmentTime = appointmentTime; }
-    public Date getCreatedDate() { return createdDate; }
-    public void setCreatedDate(Date createdDate) { this.createdDate = createdDate; }
-    public Date getApprovedDate() { return approvedDate; }
-    public void setApprovedDate(Date approvedDate) { this.approvedDate = approvedDate; }
     public String getReason() { return reason; }
     public void setReason(String reason) { this.reason = reason; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+    public Date getCreatedDate() { return createdDate; }
+    public void setCreatedDate(Date createdDate) { this.createdDate = createdDate; }
+    public Date getApprovedDate() { return approvedDate; }
+    public void setApprovedDate(Date approvedDate) { this.approvedDate = approvedDate; }
 
-    public int getPatientId() { return patient != null ? patient.getPatientId() : 0; }
-    public void setPatientId(int patientId) {
-        if (this.patient == null) {
-            this.patient = new Patient();
-        }
-        this.patient.setPatientId(patientId);
+    // Helper methods for form binding
+    public Integer getSpecialtyId() {
+        return specialty != null ? specialty.getSpecialtyId() : null;
     }
-    public Integer getDoctorId() { return doctor != null ? doctor.getDoctorId() : null; }
+    public void setSpecialtyId(Integer specialtyId) {
+        if (specialtyId == null) {
+            this.specialty = null;
+        } else {
+            this.specialty = new Specialty();
+            this.specialty.setSpecialtyId(specialtyId);
+        }
+    }
+    public Integer getDoctorId() {
+        return doctor != null ? doctor.getDoctorId() : null;
+    }
     public void setDoctorId(Integer doctorId) {
         if (doctorId == null) {
             this.doctor = null;
         } else {
-            if (this.doctor == null) {
-                this.doctor = new Doctor();
-            }
+            this.doctor = new Doctor();
             this.doctor.setDoctorId(doctorId);
         }
-    }
-    public int getSpecialtyId() { return specialty != null ? specialty.getSpecialtyId() : 0; }
-    public void setSpecialtyId(int specialtyId) {
-        if (this.specialty == null) {
-            this.specialty = new Specialty();
-        }
-        this.specialty.setSpecialtyId(specialtyId);
     }
 }

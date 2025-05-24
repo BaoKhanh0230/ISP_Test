@@ -7,18 +7,14 @@ import jakarta.persistence.*;
 public class Specialty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int specialtyId;
+    private Integer specialtyId; // Changed to Integer
 
+    @Column(name = "specialty_name")
     private String specialtyName;
 
-    public Specialty() {}
-    public Specialty(int specialtyId, String specialtyName) {
-        this.specialtyId = specialtyId;
-        this.specialtyName = specialtyName;
-    }
-
-    public int getSpecialtyId() { return specialtyId; }
-    public void setSpecialtyId(int specialtyId) { this.specialtyId = specialtyId; }
+    // Getters and Setters
+    public Integer getSpecialtyId() { return specialtyId; }
+    public void setSpecialtyId(Integer specialtyId) { this.specialtyId = specialtyId; }
     public String getSpecialtyName() { return specialtyName; }
     public void setSpecialtyName(String specialtyName) { this.specialtyName = specialtyName; }
 }

@@ -1,5 +1,6 @@
 package com.hospital.controller;
 
+import com.hospital.model.Doctor;
 import com.hospital.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,13 +20,15 @@ public class PatientDashboardController {
 
     @GetMapping("/dashboard")
     public String showDashboard(Model model) {
+        int patientId = 1; // Hardcoded for now
+        model.addAttribute("patientId", patientId);
         return "patientDashboard";
     }
 
-    @GetMapping("/searchDoctor")
-    public String searchDoctor(@RequestParam String query, Model model) {
-        List<com.hospital.model.Doctor> doctors = appointmentService.searchDoctors(query);
+    @GetMapping("/search")
+    public String searchDoctors(@RequestParam("query") String query, Model model) {
+        List<Doctor> doctors = appointmentService.searchDoctors(query);
         model.addAttribute("doctors", doctors);
-        return "patientDashboard :: doctorSearchResults";
+        return "fragments/doctorSearchResults :: doctorResults";
     }
 }

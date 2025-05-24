@@ -1,6 +1,7 @@
 package com.hospital.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -10,15 +11,25 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int patientId;
 
+    @Column(name = "full_name")
     private String fullName;
+
+    @Column(name = "gender")
     private char gender;
+
+    @Column(name = "birthdate")
+    @NotNull(message = "Birthdate is required")
     private Date birthdate;
+
+    @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "email")
     private String email;
 
+    // Constructors
     public Patient() {}
-    public Patient(int patientId, String fullName, char gender, Date birthdate, String phoneNumber, String email) {
-        this.patientId = patientId;
+    public Patient(String fullName, char gender, Date birthdate, String phoneNumber, String email) {
         this.fullName = fullName;
         this.gender = gender;
         this.birthdate = birthdate;
@@ -26,6 +37,7 @@ public class Patient {
         this.email = email;
     }
 
+    // Getters and Setters
     public int getPatientId() { return patientId; }
     public void setPatientId(int patientId) { this.patientId = patientId; }
     public String getFullName() { return fullName; }
